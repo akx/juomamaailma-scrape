@@ -1,5 +1,4 @@
 doc.tsv: items.jsonl
-	jq -r -s 'sort_by(.category_name, .name, .sku) | .[] | [.category_name,.sku,.name,.["package-info"],.url] | @tsv' items.jsonl | uniq > doc.tsv
-
+	python convert_to_tsv.py <$< >$@
 items.jsonl: scrape.py
 	scrapy runspider scrape.py -o items.jsonl -t jsonlines
