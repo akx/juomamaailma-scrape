@@ -1,13 +1,24 @@
 import scrapy
 import itertools
 
-categories = ["soft-drinks", "waters", "juices", "special-drinks"]
-
 
 class Jider(scrapy.Spider):
     name = "blogspider"
 
     def start_requests(self):
+        yield scrapy.Request(
+            "https://www.juomamaailma.fi/fi/", callback=self.parse_for_categories
+        )
+
+    def parse_for_categories(self, response):
+        categories = set()
+        for cat_link in response.css(".v-navigation__item--url-tuotteet a::attr(href)"):
+            category_slug = cat_link.get().replace(
+                "https://www.juomamaailma.fi/fi/tuotteet/", ""
+            )
+            if "/" not in category_slug:
+                categories.add(category_slug)
+
         for category_name in categories:
             yield scrapy.Request(
                 url=f"https://www.juomamaailma.fi/fi/tuotteet/{category_name}?p=1",
