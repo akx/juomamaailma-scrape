@@ -7,21 +7,21 @@ class Jider(scrapy.Spider):
 
     def start_requests(self):
         yield scrapy.Request(
-            "https://www.juomamaailma.fi/fi/", callback=self.parse_for_categories
+            "https://juomamaailma.fi/fi/", callback=self.parse_for_categories
         )
 
     def parse_for_categories(self, response):
         categories = set()
         for cat_link in response.css(".v-navigation__item--url-tuotteet a::attr(href)"):
             category_slug = cat_link.get().replace(
-                "https://www.juomamaailma.fi/fi/tuotteet/", ""
+                "https://juomamaailma.fi/fi/tuotteet/", ""
             )
             if "/" not in category_slug:
                 categories.add(category_slug)
 
         for category_name in categories:
             yield scrapy.Request(
-                url=f"https://www.juomamaailma.fi/fi/tuotteet/{category_name}?p=1",
+                url=f"https://juomamaailma.fi/fi/tuotteet/{category_name}?p=1",
                 cb_kwargs={"category_name": category_name},
                 callback=self.parse_category_page,
             )
