@@ -1,6 +1,6 @@
-doc.tsv: items.jsonl
+doc.tsv: items.jsonlines
 	python convert_to_tsv.py <$< >$@
-items.jsonl: scrape.py
-	scrapy runspider scrape.py -o items.jsonl -t jsonlines
+items.jsonlines: scrape.py
+	scrapy runspider scrape.py -o items.jsonlines
 clean:
-	rm -f doc.tsv items.jsonl
+	rm -f doc.tsv items.jsonlines

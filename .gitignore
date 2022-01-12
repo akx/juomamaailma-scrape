@@ -1,3 +1,4 @@
 *.jsonl
+*.jsonlines
 *.py[cod]
 *.tsv
